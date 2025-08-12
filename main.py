@@ -1,17 +1,13 @@
 import os
 import tempfile
 import shutil
-import traceback
 from flask import Flask, request, Response
 import telebot
 from telebot import types
 import subprocess
 
-# ضع توكن بوتك هنا
-TOKEN = "8360006158:AAGBZ1pDVGBkVV0aHj-DtzHdywHseawTRVo"
-
-# ضع رابط خدمتك (سيظهر لك بعد رفع البوت في Render أو أي خدمة استضافة)
-WEBHOOK_URL = os.environ.get("WEBHOOK_URL")  # مثال: "https://yourservice.onrender.com"
+TOKEN = os.environ.get("TELEGRAM_TOKEN")  # ياخذ التوكن من متغير البيئة
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL")  # ياخذ رابط الاستضافة من متغير البيئة
 
 bot = telebot.TeleBot(TOKEN, threaded=True)
 app = Flask(__name__)
@@ -34,7 +30,6 @@ def download_media(url: str, output_dir: str, only_audio=False, quality=None):
     if only_audio:
         cmd += ["-x", "--audio-format", "mp3", "--audio-quality", "0"]
     if quality:
-        # تحديد الجودة مثلا "bestvideo[height<=720]+bestaudio/best"
         cmd += ["-f", quality]
 
     cmd.append(url)
